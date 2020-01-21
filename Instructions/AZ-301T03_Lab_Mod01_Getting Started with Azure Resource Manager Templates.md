@@ -1,4 +1,4 @@
-﻿# Deploying Resources with Azure Resource Manager
+# Deploying Resources with Azure Resource Manager
 # Lab Answer Key: Getting Started with Azure Resource Manager Templates and Azure Building Blocks
 
 ## Before we start
@@ -50,9 +50,9 @@
 
 1. On the **Edit template** blade, click **Load file**.
 
-1. In the **Choose File to Upload** dialog box, navigate to the **F:\\Labfiles\\Mod02\\Starter\\** folder, select the **vnet-simple-template.json** file, and click **Open**. This will load the following content into the template editor pane:
+1. In the **Choose File to Upload** dialog box, navigate to the **\\allfiles\\AZ-301T03\\Module_01\\Labfiles\\Starter\\** folder, select the **vnet-simple-template.json** file, and click **Open**. This will load the following content into the template editor pane:
 
-    ```
+    ```json
     {
         "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
         "contentVersion": "1.0.0.0",
@@ -62,7 +62,7 @@
                 "defaultValue": "vnet-",
                 "metadata": {
                     "description": "Name prefix of the vnet"
-                 }
+                }
             },
             "vnetIPPrefix": {
                 "type": "string",
@@ -107,7 +107,7 @@
                     {
                         "name": "[concat(parameters('subnetNamePrefix'), variables('subnetNameSuffix'))]",
                         "properties": {
-                        "addressPrefix": "[parameters('subnetIPPrefix')]"
+                            "addressPrefix": "[parameters('subnetIPPrefix')]"
                         }
                     }
                 ],
@@ -152,7 +152,7 @@
 
 1. On the **Resource groups** blade, click the entry representing the resource group to which you deployed the template in the previous task.
 
-1. With the **Overview** selection active, on the resource group blade, click the **Deployments** link. 
+1. With the **Overview** selection active, on the resource group blade, click the **Deployments** link.
 
 1. On the resulting blade, click the latest deployment to view its metadata in a new blade.
 
@@ -172,7 +172,7 @@
 
 1. If this is your first time opening the **Cloud Shell** using your subscription, you will see a wizard to configure **Cloud Shell** for first-time usage. When prompted, in the **Welcome to Azure Cloud Shell** pane, click **Bash (Linux)**.
 
-    > **Note**: If you do not see the configuration options for **Cloud Shell**, this is most likely because you are using an existing subscription with this course's labs. If so, proceed directly to the next task. 
+    > **Note**: If you do not see the configuration options for **Cloud Shell**, this is most likely because you are using an existing subscription with this course's labs. If so, proceed directly to the next task.
 
 1. In the **You have no storage mounted** pane, click **Show advanced settings**, perform the following tasks:
 
@@ -180,9 +180,9 @@
 
     - In the **Cloud Shell region** drop-down list, select the Azure region matching or near the location where you deployed resources in this lab
 
-    - Resource group: ensure that the **Create new** option is selected and, in the text box, type **AADesignLab0202-RG**.
+    - Resource group: ensure that the **Use Existing** option is selected and select **AADesignLab0201-RG**.
 
-    - In the **Storage account** section, ensure that the **Create new** option is selected and then, in the text box below, type a unique name consisting of a combination of between 3 and 24 characters and digits. 
+    - In the **Storage account** section, ensure that the **Create new** option is selected and then, in the text box below, type a unique name consisting of a combination of between 3 and 24 characters and digits.
 
     - In the **File share** section, ensure that the **Create new** option is selected and then, in the text box below, type **cloudshell**.
 
@@ -195,25 +195,25 @@
 
 1. At the **Cloud Shell** command prompt at the bottom of the portal, type in the following command and press **Enter** to create a local directory to install the Azure Building Blocks npm package:
 
-    ```
+    ```sh
     mkdir ~/.npm-global
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to update the npm configuration to include the new local directory:
 
-    ```
+    ```sh
     npm config set prefix '~/.npm-global'
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to open the ~./bashrc configuration file for editing:
 
-    ```
+    ```sh
     vi ~/.bashrc
     ```
 
 1. At the **Cloud Shell** command prompt, in the vi editor interface, scroll down to the bottom of the file (or type **G**), scroll to the right to the right-most character on the last line (or type **$**), type **a** to enter the **INSERT** mode, press **Enter** to start a new line, and then type the following to add the newly created directory to the system path:
 
-    ```
+    ```sh
     export PATH="$HOME/.npm-global/bin:$PATH"
     ```
 
@@ -221,17 +221,17 @@
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to install the Azure Building Blocks npm package:
 
-    ```
+    ```sh
     npm install -g @mspnp/azure-building-blocks
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to exit the shell:
 
-    ```
+    ```sh
     exit
     ```
 
-1. In the **Cloud Shell timed out** pane, click **Reconnect**. 
+1. In the **Cloud Shell timed out** pane, click **Reconnect**.
 
     > **Note**: You need to restart Cloud Shell for the installation of the Buliding Blocks npm package to take effect.
 
@@ -240,37 +240,42 @@
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to download the GitHub repository containing the Azure Building Blocks templates:
 
-    ```
+    ```sh
     git clone https://github.com/mspnp/template-building-blocks.git
     ```
 
 1.  At the **Cloud Shell** command prompt, type in the following command and press **Enter** to view the content of the Azure Building Block parameter file you will use for this deployment:
 
-    ```
-    cat ./template-building-blocks/scenarios/vnet/vnet-simple.json 
+    ```sh
+    cat ./template-building-blocks/scenarios/vnet/vnet-simple.json
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create a variable which value designates the name of your Azure subscription:
 
-    ```
+    ```sh
     SUBSCRIPTION_ID=$(az account list --query "[0].id" | tr -d '"')
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create a variable which value designates the name of the resource group you created earlier in this exercise:
 
-    ```
+    ```sh
     RESOURCE_GROUP='AADesignLab0202-RG'
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create a variable which value designates the Azure region you will use for the deployment:
 
-    ```
+    ```sh
     LOCATION=$(az group list --query "[?name == 'AADesignLab0201-RG'].location" --output tsv)
     ```
 
+1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create the **AADesignLab0202-RG** resource group.
+
+    ```sh
+    az group create --location $LOCATION --name $RESOURCE_GROUP
+    ```
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to deploy a virtual network by using the Azure Building Blocks:
 
-    ```
+    ```sh
     azbb -g $RESOURCE_GROUP -s $SUBSCRIPTION_ID -l $LOCATION -p ./template-building-blocks/scenarios/vnet/vnet-simple.json --deploy
     ```
 
@@ -283,7 +288,7 @@
 
 1. On the **Resource groups** blade, click the entry representing the resource group you created earlier in this exercise.
 
-1. With the **Overview** selection active, on the resource group blade, click the **Deployments** link. 
+1. With the **Overview** selection active, on the resource group blade, click the **Deployments** link.
 
 1. On the resulting blade, click the latest deployment to view its metadata in a new blade.
 
@@ -291,7 +296,7 @@
 
 1. Close the **Cloud Shell** pane.
 
-> **Review**: In this exercise, you deployed an Azure virtual network by using an Azure Resource Manager template from the Azure portal
+> **Review**: In this exercise, you deployed an Azure virtual network by using Azure Building Blocks templates from the cloud shell.
 
 
 ## Exercise 3: Remove lab resources
@@ -302,7 +307,7 @@
 
 1. At the **Cloud Shell** command prompt at the bottom of the portal, type in the following command and press **Enter** to list all resource groups you created in this lab:
 
-    ```
+    ```sh
     az group list --query "[?starts_with(name,'AADesignLab02')]".name --output tsv
     ```
 
@@ -312,7 +317,7 @@
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to delete the resource groups you created in this lab
 
-    ```
+    ```sh
     az group list --query "[?starts_with(name,'AADesignLab02')]".name --output tsv | xargs -L1 bash -c 'az group delete --name $0 --no-wait --yes'
     ```
 

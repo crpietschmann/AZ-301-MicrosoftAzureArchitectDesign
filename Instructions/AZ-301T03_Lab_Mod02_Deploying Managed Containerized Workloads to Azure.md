@@ -1,4 +1,4 @@
-﻿# Creating Managed Server Applications in Azure
+# Creating Managed Server Applications in Azure
 
 # Lab Answer Key: Deploying Managed Containerized Workloads to Azure
 
@@ -44,7 +44,7 @@
 
 1. If this is your first time opening the **Cloud Shell** using your subscription, you will see a wizard to configure **Cloud Shell** for first-time usage. When prompted, in the **Welcome to Azure Cloud Shell** pane, click **Bash (Linux)**.
 
-    > **Note**: If you do not see the configuration options for **Cloud Shell**, this is most likely because you are using an existing subscription with this course's labs. If so, proceed directly to the next task. 
+    > **Note**: If you do not see the configuration options for **Cloud Shell**, this is most likely because you are using an existing subscription with this course's labs. If so, proceed directly to the next task.
 
 1. In the **You have no storage mounted** pane, click **Show advanced settings**, perform the following tasks:
 
@@ -54,7 +54,7 @@
 
     - In the **Resource group** section, ensure that the **Create new** option is selected and then, in the text box, type **AADesignLab0401-RG**.
 
-    - In the **Storage account** section, ensure that the **Create new** option is selected and then, in the text box below, type a unique name consisting of a combination of between 3 and 24 characters and digits. 
+    - In the **Storage account** section, ensure that the **Create new** option is selected and then, in the text box below, type a unique name consisting of a combination of between 3 and 24 characters and digits.
 
     - In the **File share** section, ensure that the **Create new** option is selected and then, in the text box below, type **cloudshell**.
 
@@ -66,29 +66,40 @@
 
 1. At the **Cloud Shell** command prompt at the bottom of the portal, type in the following command and press **Enter** to create a variable which value designates the name of the resource group you will use in this task:
 
-    ```
+    ```sh
     RESOURCE_GROUP='AADesignLab0402-RG'
     ```
 
-1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create a variable which value designates the Azure region you will use for the deployment (replace the placeholder `<Azure region>` with the name of the Azure region to which you intend to deploy resources in this lab):
+1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create a variable which value designates the Azure region you will use for the deployment (replace the placeholder `<Azure region>` with the name of the Azure region to which you intend to deploy resources in this lab. `az account list-locations` will list all available locations for your subscription.):
 
-    ```
+    ```sh
     LOCATION='<Azure region>'
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create a new resource group:
 
-    ```
+    ```sh
     az group create --name $RESOURCE_GROUP --location $LOCATION
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create a new AKS cluster:
 
-    ```
-    az aks create --resource-group $RESOURCE_GROUP --name aad0402-akscluster --node-count 1 --node-vm-size Standard_D1_v2 --generate-ssh-keys
+    ```sh
+    az aks create --resource-group $RESOURCE_GROUP --name aad0402-akscluster --node-count 1 --node-vm-size Standard_DS1_v2 --generate-ssh-keys
     ```
 
     > **Note**: If you receive an error message regarding availability of the VM size which value is represented by the `--node-vm-size` parameter, review the message and try other suggested VM sizes.
+
+    > **Note**: Alternatively, in **PowerShell** on **Cloud Shell**  you can identify VM sizes available in your subscription in a given region by running the following command and reviewing the values in the **Restriction** column (make sure to replace the `region` placeholder with the name of the target region):
+
+    ```pwsh
+    Get-AzComputeResourceSku | where {$_.Locations -icontains "region"} | Where-Object {($_.ResourceType -ilike "virtualMachines")}
+    ```
+
+    > **Note**: The **Restriction** column will contain the value **NotAvailableForSubscription** for VM sizes that are not available in your subscription.
+
+    > **Note**: As of 2/21/2019, VM Size **Standard_DS2_V2** was available in **westeurope**
+
 
 1. Wait for the deployment to complete before you proceed to the next task.
 
@@ -99,8 +110,8 @@
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to retrieve the credentials to access the AKS cluster:
 
-    ```
-    az aks get-credentials --resource-group $RESOURCE_GROUP --name aad0402-akscluster 
+    ```sh
+    az aks get-credentials --resource-group $RESOURCE_GROUP --name aad0402-akscluster
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to verify connectivity to the AKS cluster:
@@ -110,13 +121,13 @@
     ```
 
 1. At the **Cloud Shell** command prompt, review the output and verify that the node is reporting the **Ready** status. Rerun the command until the correct status is shown.
-  
-> **Result**: After you complete this exercise, you should have successfully deployed a new AKS cluster. 
+
+> **Result**: After you complete this exercise, you should have successfully deployed a new AKS cluster.
 
 
 ## Exercise 2: Managing an AKS cluster and its containerized workloads.
 
-#### Task 1: Deploy a containerized application to an AKS cluster 
+#### Task 1: Deploy a containerized application to an AKS cluster
 
 1. In the Microsoft Edge window, in the Azure portal, at the **Cloud Shell** prompt, type the following command and press **Enter** in order to deploy the **nginx** image from the Docker Hub:
 
@@ -124,7 +135,7 @@
     kubectl run aad0402-akscluster --image=nginx --replicas=1 --port=80
     ```
 
-    > **Note**: Make sure to use lower case letters when typing the name of the deployment.
+    > **Note**: Make sure to use lower case letters when typing the name of the deployment. You will also receive a notification that this command is deprecated and will be removed in a future version, but successfully created the cluster.
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to verify that a Kubernetes pod has been created:
 
@@ -152,12 +163,12 @@
     kubectl get service --watch
     ```
 
-1. Wait until the value in the **EXTERNAL-IP** column for the **aad0402-akscluster** entry changes from **<pending>** to a public IP address, then press **Ctrl-C** key combination. Note the public IP address in the **EXTERNAL-IP** column for **aad0402-akscluster**. 
+1. Wait until the value in the **EXTERNAL-IP** column for the **aad0402-akscluster** entry changes from **\<pending\>** to a public IP address, then press **Ctrl-C** key combination. Note the public IP address in the **EXTERNAL-IP** column for **aad0402-akscluster**.
 
-1. Start Microsoft Edge and browse to the IP address you obtained in the previous step. Verify that Microsoft Edge displays a web page with the **Welcome to nginx!** message. 
+1. Start Microsoft Edge and browse to the IP address you obtained in the previous step. Verify that Microsoft Edge displays a web page with the **Welcome to nginx!** message.
 
 
-#### Task 2: Scaling containerized applications and AKS cluster nodes 
+#### Task 2: Scaling containerized applications and AKS cluster nodes
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to scale the deployment:
 
@@ -175,7 +186,7 @@
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to scale out the number of cluster nodes:
 
-    ```
+    ```sh
     az aks scale --resource-group $RESOURCE_GROUP --name aad0402-akscluster --node-count 2
     ```
 
@@ -205,7 +216,7 @@
 
     > **Note**: Review the output of the command and verify that the number of pods increased to 10.
 
-1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to review the pods distribution across cluster nodes: 
+1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to review the pods distribution across cluster nodes:
 
     ```
     kubectl get pod -o=custom-columns=NODE:.spec.nodeName,POD:.metadata.name
@@ -216,7 +227,7 @@
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to delete the deployment:
 
     ```
-    kubectl delete deployment aad0402-akscluster 
+    kubectl delete deployment aad0402-akscluster
     ```
 
 ## Exercise 3: Autoscaling pods in an AKS cluster
@@ -231,24 +242,24 @@
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to navigate to the location of the downloaded app:
 
-    ```
+    ```sh
     cd azure-voting-app-redis
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to list the content of the application **.yaml** file:
 
-    ```
+    ```sh
     cat azure-vote-all-in-one-redis.yaml
     ```
 
 1. Review the output of the command and verify that the pod defninition includes requests and limits in the followng format:
 
-    ```
+    ```yaml
     resources:
       requests:
-         cpu: 250m
+        cpu: 250m
       limits:
-         cpu: 500m
+        cpu: 500m
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to deploy the application based on the **.yaml** file:
@@ -269,15 +280,16 @@
     kubectl get service azure-vote-front --watch
     ```
 
-1. Wait until the value in the **EXTERNAL-IP** column for the **azure-vote-front** entry changes from **<pending>** to a public IP address, then press **Ctrl-C** key combination. Note the public IP address in the **EXTERNAL-IP** column for **azure-vote-front**. 
+1. Wait until the value in the **EXTERNAL-IP** column for the **azure-vote-front** entry changes from **\<pending\>** to a public IP address, then press **Ctrl-C** key combination. Note the public IP address in the **EXTERNAL-IP** column for **azure-vote-front**.
 
-1. Start Microsoft Edge and browse to the IP address you obtained in the previous step. Verify that Microsoft Edge displays a web page with the **Azure Voting App** message. 
+1. Start Microsoft Edge and browse to the IP address you obtained in the previous step. Verify that Microsoft Edge displays a web page with the **Azure Voting App** message.
 
 #### Task 2: Autoscale Kubernetes pods.
 
-1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to download a sample containerized application:
+1. At the **Cloud Shell** command prompt, type in the following commands and press **Enter** after each to change the current directory and download a sample containerized application:
 
     ```
+    cd ..
     git clone https://github.com/kubernetes-incubator/metrics-server.git
     ```
 
@@ -305,18 +317,18 @@
     kubectl get pods
     ```
 
-    > **Note**: Verify that the number of replicas incrased to 3. If that is not the case, wait one minute and rerun the two previous steps.
+    > **Note**: Verify that the number of replicas increased to 3. If that is not the case, wait one minute and rerun the two previous steps.
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to delete the deployment:
 
     ```
-    kubectl delete deployment azure-vote-front 
+    kubectl delete deployment azure-vote-front
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to delete the deployment:
 
     ```
-    kubectl delete deployment azure-vote-back 
+    kubectl delete deployment azure-vote-back
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to verify that the commands you ran in the previous steps completed successfully:
@@ -340,7 +352,7 @@
 
 #### Task 1: Deploy DevOps with AKS
 
-    > **Note**: This solution is based on the DevOps with Containers solution described at https://docs.microsoft.com/en-us/azure/architecture/example-scenario/apps/devops-with-aks.
+> **Note**: This solution is based on the DevOps with Containers solution described at https://docs.microsoft.com/en-us/azure/architecture/example-scenario/apps/devops-with-aks.
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to generate the SSH key pair that will be used to authenticate when accessing the Linux VMs running the Jenkins instance and Grafana console:
 
@@ -354,13 +366,13 @@
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create a variable which value designates the public key of the newly generated key pair:
 
-    ```
+    ```sh
     PUBLIC_KEY=$(cat ~/.ssh/id_rsa.pub)
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create a variable which value designates the public key of the newly generated key pair and which takes into account any special character the public key might include:
 
-    ```
+    ```sh
     PUBLIC_KEY_REGEX="$(echo $PUBLIC_KEY | sed -e 's/\\/\\\\/g; s/\//\\\//g; s/&/\\\&/g')"
     ```
 
@@ -368,66 +380,66 @@
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create a variable which value designates the name of the resource group you will use for the deployment:
 
-    ```
+    ```sh
     RESOURCE_GROUP='AADesignLab0403-RG'
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create a variable which value designates the Azure region you will use for the deployment:
 
-    ```
+    ```sh
     LOCATION=$(az group list --query "[?name == 'AADesignLab0402-RG'].location" --output tsv)
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create a new resource group:
 
-    ```
+    ```sh
     az group create --name $RESOURCE_GROUP --location $LOCATION
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create an Azure Active Directory service principal for the authentication of services and resources within the sample solution:
 
-    ```
-    SERVICE_PRINCIPAL=$(az ad sp create-for-rbac --name AADesignLab0403-SP)
+    ```sh
+    SERVICE_PRINCIPAL=$(az ad sp create-for-rbac --name AADesignLab0403-SP --output json)
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to retrieve the **appId** attribute of the newly created service principal:
 
-    ```
-    APP_ID=$(echo $SERVICE_PRINCIPAL | jq .appId | tr -d '"')
+    ```sh
+    APP_ID=$(echo $SERVICE_PRINCIPAL | jq -r .appId)
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to retrieve the **password** attribute of the newly created service principal:
 
-    ```
-    PASSWORD=$(echo $SERVICE_PRINCIPAL | jq .password | tr -d '"')
+    ```sh
+    PASSWORD=$(echo $SERVICE_PRINCIPAL | jq -r .password)
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create the parameters file you will use for deployment of the sample solution and open it in the vi interface:
 
-    ```
-    vi ~/github.json
+    ```sh
+    vi ~/parameters.json
     ```
 
-1. At the **Cloud Shell** command prompt, in the vi editor interface, add the content of the sample parameters file (**F:\\Labfiles\\Mod04\\Starter\\parameters.json**):
+1. At the **Cloud Shell** command prompt, in the vi editor interface, add the content of the sample parameters file (**\\allfiles\\AZ-301T03\\Module_02\\Labfiles\\Starter\\parameters.json**):
 
-    ```
+    ```json
     {
       "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
       "contentVersion": "1.0.0.0",
       "parameters": {
-        "webAppName": {
-          "value": "$"
+        "spClientId": {
+          "value": "$APP_ID"
         },
-        "spClientSecret": {		
+        "spClientSecret": {
           "value": "$PASSWORD"
         },
         "linuxAdminUsername": {
           "value": "Student"
         },
-        "linuxAdminPassword": {		
+        "linuxAdminPassword": {
           "value": "Pa55w.rd1234"
         },
-        "linuxSSHPublicKey": {		
+        "linuxSSHPublicKey": {
           "value": "$PUBLIC_KEY_REGEX"
         }
       }
@@ -438,32 +450,32 @@
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to replace the placeholder for the **appId** attibute with the value of the **$APP_ID** variable in the parameters file:
 
-    ```
+    ```sh
     sed -i.bak1 's/"$APP_ID"/"'"$APP_ID"'"/' ~/parameters.json
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to replace the placeholder for the **password** attribute with the value of the **$PASSWORD** variable in the parameters file:
 
-    ```
+    ```sh
     sed -i.bak2 's/"$PASSWORD"/"'"$PASSWORD"'"/' ~/parameters.json
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to replace the placeholder for the **sshPublicKey** parameter with the value of the **$PUBLIC_KEY_REGEX** variable in the parameters file:
 
-    ```
+    ```sh
     sed -i.bak3 's/"$PUBLIC_KEY_REGEX"/"'"$PUBLIC_KEY_REGEX"'"/' ~/parameters.json
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to verify that the placeholders were successfully replaced in the parameters file:
 
-    ```
+    ```sh
     cat ~/parameters.json
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to deploy the sample solution by using its Azure Resource Manager template residing in a GitHub repository:
 
-    ```
-    az group deployment create --resource-group $RESOURCE_GROUP --template-uri https://raw.githubusercontent.com/mspnp/solution-architectures/master/apps/devops-with-aks/azuredeploy.json --parameters @parameters.json
+    ```sh
+    az group deployment create --resource-group $RESOURCE_GROUP --template-uri https://raw.githubusercontent.com/MicrosoftLearning/AZ-301-MicrosoftAzureArchitectDesign/master/allfiles/AZ-301T03/Module_02/LabFiles/Starter/azuredeploy.json --parameters ~/parameters.json
     ```
 
 1. Wait for the deployment to complete before you proceed to the next task.
@@ -479,7 +491,7 @@
 
 1. On the **AADesignLab0403-RG** resource group blade, review the list of resources and compare them with the information available at https://docs.microsoft.com/en-us/azure/architecture/example-scenario/apps/devops-with-aks
 
-> **Review**: In this exercise, you deployed Azure VMs running Windows Server 2016 Datacenter and Linux from Cloud Shell by using Azure Building Blocks.
+> **Review**: In this exercise, you deployed DevOps with AKS architecture.
 
 
 ## Exercise 5: Remove lab resources
@@ -490,7 +502,7 @@
 
 1. At the **Cloud Shell** command prompt at the bottom of the portal, type in the following command and press **Enter** to list all resource groups you created in this lab:
 
-    ```
+    ```sh
     az group list --query "[?starts_with(name,'AADesignLab04')]".name --output tsv
     ```
 
@@ -500,7 +512,7 @@
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to delete the resource groups you created in this lab
 
-    ```
+    ```sh
     az group list --query "[?starts_with(name,'AADesignLab04')]".name --output tsv | xargs -L1 bash -c 'az group delete --name $0 --no-wait --yes'
     ```
 

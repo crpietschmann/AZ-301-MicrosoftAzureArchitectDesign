@@ -1,4 +1,4 @@
-﻿# Building Azure IaaS-Based Server Applications.
+# Building Azure IaaS-Based Server Applications.
 # Lab Answer Key: Building Azure IaaS-Based Server Applications by using Azure Resource Manager Templates and Azure Building Blocks.
 
 ## Before we start
@@ -40,77 +40,89 @@
 
 1. In the upper left corner of the Azure portal, click **Create a resource**.
 
-1. At the top of the **New** blade, in the **Search the Marketplace** text box, type **Windows Server 2016** and press **Enter**.
+1. At the top of the **New** blade, in the **Search the Marketplace** text box, type **Windows Server** and press **Enter**.
 
-1. On the **Everything** blade, in the search results, click **Windows Server 2016 Datacenter**.
+1. On the **Everything** blade, in the search results, click **Windows Server**.
 
-1. On the **Windows Server 2016 Datacenter** blade, click the **Create** button.
+1. On the **Windows Server** blade, select the **[smalldisk] Windows Server 2016 Datacenter** software plan, then click the **Create** button.
 
-1. On the **Basics** blade, perform the following tasks:
+1. On the **Basics** tab, perform the following tasks:
+
+    - Leave the **Subscription** drop-down list entry set to its default value.
+
+    - In the **Resource group** section, click **Create new**, in the text box, type **AADesignLab0301-RG**, and click **OK**.
 
     - In the **Name** text box, enter the value **lab03vm0**.
 
-    - In the **VM disk type** list, select the **SSD** option.
+    - In the **Region** drop-down list, select an Azure region to which you want to deploy resources in this lab.
+
+    - In the **Availability options** drop-down list, select **Availability set**.
+
+    - In the **Availability set** section, click **Create new**, box, enter the value **lab03avset0**, set **Fault domains** to the maximum value, leave **Update domains** with its default value, and click **OK**.
+
+    - Leave the entry in the **Image** drop-down list set to its default value.
+
+    - Ensure that the size is set to **Standard DS1 v2**
 
     - In the **Username** text box, enter the value **Student**.
 
     - In the **Password** and **Confirm password** text boxes, enter the value **Pa55w.rd1234**.
 
-    - Leave the **Subscription** drop-down list entry set to its default value.
+    - In the **Public inbound ports** section, select the **Allow selected port** option and, in the **Select inbound ports** drop-down list, select **HTTP**.
 
-    - In the **Resource group** section, select the **Create new** option and, in the text box, type **AADesignLab0301-RG**.
+    - Leave the **Already have a Windows license?** option set to **No**.
 
-    - In the **Location** drop-down list, select an Azure region to which you want to deploy resources in this lab.
+    - Click **Next: Disks >**
 
-    - Leave the **Already have a Windows license?** option set to its default value
+1. On the **Disks** tab, perform the following tasks:
 
-    - Click the **OK** button.
+    - Ensure that the **OS disk type** dropdown list entry is set to **Premium SSD**
 
-1. On the **Choose a size** blade, click the entry representing the size **DS1_v2** and click the **Select** button.
+    - Click **Next: Networking >**
 
-1. On the **Settings** blade, perform the following tasks:
+1. On the **Networking** tab, perform the following tasks:
 
-    - Leave the **Availability zones** drop down list set to its default value.
+    - In the **Virtual network** section, click **Create new**.
 
-    - Click **Availability set**, on the **Change availability set** blade, click **Create new**, on the **Crete new** blade, specify the following settings and click **OK**:
-
-        - In the **Name** text box, enter the value **lab03avset0**.
-
-        - Set **Fault domains** to the maximum value
-
-        - Leave **Update domains** with its default value.
-
-    - Click **Virtual network**, on the **Create virtual network** blade, specify the following settings and click **OK**:
+    - On the **Create virtual network** blade, specify the following settings and click **OK**:
 
         - In the **Name** text box, enter the value **lab03vnet0**.
 
-        - In the **Address space** text box, enter the value **10.3.0.0/16**.
+        - In the **Address range** text box, enter the value **10.3.0.0/16**.
 
         - In the **Subnet name** text box, enter the value **subnet-0**.
 
-        - In the **Subnet address range** text box, enter the value **10.3.0.0/24**.
+        - In the **Subnet address range** text box, enter the value **10.3.0.0/24**, and click **OK**.
 
-    - Leave the **Public IP address** entry set to its default value.
+    - Leave the **Public IP** entry set to its default value.
 
-    - Leave the **Network Security Group** entry set to its default value.
+    - Leave the **NIC network security group** option set to **Basic**.
 
-    - In the **Select public inbound ports**, select the checkbox **No public inbound ports**.
+    - Leave the **Public inbound ports** option set to **Allow selected ports**
+
+    - Leave the **Select inbound ports** entry set to **HTTP**
 
     - Leave the **Accelerated networking** entry set to its default value.
 
-    - Leave the **Extensions** entry set to its default value.
+    - Click **Next: Management >**
 
-    - Leave the **Enable auto-shutdown** entry set to its default value.
+1. On the **Management** tab, perform the following tasks:
 
-    - Leave the **Boot diagnostics** entry set to its default value.
+    - Leave the **Boot diagnostics** option set to its default value.
 
-    - Leave the **Guest OS diagnostics** entry set to its default value.
+    - Leave the **OS guest diagnostics** option set to its default value.
 
-    - Leave the **Register with Azure Active Directory** entry set to its default value.
+    - Leave the **Diagnostics storage account** entry set to its default value.
 
-    - Click the **OK** button.
+    - Leave the **System assigned managed identity** option set to its default value.
 
-1. On the **Summary** blade, review the settings of your new virtual machine and click the **Create** button.
+    - Leave the **Enable auto-shutdown** option set to its default value.
+
+    - Leave the **Enable backup** option set to its default value.
+
+    - Click the **Review + create** button.
+
+1. On the **Create a virtual machine** blade, review the settings of your new virtual machine and click the **Create** button.
 
 1. Do not wait for the deployment to complete and proceed to the next task.
 
@@ -119,16 +131,16 @@
 
 1. On the Taskbar, click the **File Explorer** icon.
 
-1. In the **File Explorer** window that appears, navigate to the **F:\\Labfiles\\Mod03\\Starter** folder.
+1. In the **File Explorer** window that appears, navigate to the **\\allfiles\\AZ-301T04\\Module_02\\LabFiles\\Starter\\** folder.
 
 1. Right-click the **IISWebServer.zip** file and select the **Extract All...** option.
 
 1. In the **Extract Compressed (Zipped) Folders** dialog, perform the following tasks:
 
-    - In the **Files will be extracted to this folder:** field, enter the value **F:\\Labfiles\\Mod03\\Starter\\IISWebServer**.
+    - In the **Files will be extracted to this folder:** field, enter the name of the folder into which you want to extract the files.
 
     - Ensure that the **Show extracted files when complete** checkbox is selected.
-    
+
     - Click the **Extract** button.
 
 1. In the new **File Explorer** window that appears, right-click the **IISWebServer.ps1** file and select the **Open with Code** option to start the **Visual Studio Code** application.
@@ -148,35 +160,28 @@
 
 1. At the top of the **New** blade, in the **Search the Marketplace** text box, type **Storage account** and press **Enter**.
 
-1. On the **Everything** blade, in the search results, click **Storage account - blob, file, table, queue**.
+1. On the **Everything** blade, in the search results, click **Storage account**.
 
-1. On the **Storage account - blob, file, table, queue** blade, click the **Create** button.
+1. On the **Storage account** blade, click the **Create** button.
 
 1. On the **Create storage account** blade, perform the following tasks:
-
-    - In the **Name** text box, type a unique name consisting of a combination of between 3 and 24 characters and digits.
-    
-    - In the **Deployment model** section, ensure that the **Resource manager** option is selected.
-
-    - In the **Account kind** drop-down list, ensure that the **Storage (general purpose v1)** option is selected.
-
-    - Leave the **Location** entry set to the same Azure region you selected earlier in this exercise.
-
-    - In the **Replication** drop-down list, select the **Locally-redundant storage (LRS)** entry.
-
-    - In the **Performance** section, ensure that the **Standard** option is selected. 
-
-    - In the **Secure transfer required** section, ensure that the **Disabled** option is selected. 
 
     - Leave the **Subscription** drop-down list entry set to its default value.
 
     - In the **Resource group** section, ensure that the **Use existing** option is selected and, in the drop-down list below, select the resource group you created earlier in this exercise.
 
-    - Leave the **Configure virtual networks** option set to its default value.
+    - In the **Name** text box, type a unique name consisting of a combination of between 3 and 24 characters and digits.
 
-    - Leave the **Hierarchical namespaces** option set to its default value.
+    - Leave the **Location** entry set to the same Azure region you selected earlier in this exercise.
 
-    - Click the **Create** button.
+    - In the **Performance** section, ensure that the **Standard** option is selected.
+
+
+    - In the **Account kind** drop-down list, ensure that the **Storage (general purpose v1)** option is selected.
+
+    - In the **Replication** drop-down list, select the **Locally-redundant storage (LRS)** entry.
+
+    - Click the **Review + Create** button, and then click **Create**.
 
 1. Wait for the deployment to complete before you proceed to the next task.
 
@@ -195,13 +200,13 @@
 
 1. Click the **Container** button at the top of the blade.
 
-1. In the **New container** pane that appears, specify the following settigns and click **OK**:
+1. In the **New container** pane that appears, specify the following settings and click **OK**:
 
     - In the **Name** text box, enter the value **config**.
 
     - In the **Public access level** list, select the **Blob (anonymous read access for blobs only)** option.
 
-1. Back On the **Blob service** blade, click the entry representing the new **config** container.
+1. Back on the **Blob service** blade, click the entry representing the new **config** container.
 
 1. On the **config** blade, click the **Upload** button at the top of the blade.
 
@@ -209,7 +214,7 @@
 
     - In the **Files** field, click the blue folder button to the right of the field.
 
-    - In the **Open file** dialog that appears, navigate to the **F:\\Labfiles\\Mod03\\Starter** folder.
+    - In the **Open file** dialog that appears, navigate to the **\\allfiles\\AZ-301T04\\Module_02\\LabFiles\\Starter\\** folder.
 
     - Select the **IISWebServer.zip** file.
 
@@ -222,7 +227,7 @@
 1. In the **Blob properties** popup that appears, locate and record the value of the **URL** property. This URL will be used later in this lab.
 
 
-#### Task 6: Deploy an Azure VM by using an Azure Resource Manager template with PowerShell DSC extension from the Aure portal.
+#### Task 6: Deploy an Azure VM by using an Azure Resource Manager template with PowerShell DSC extension from the Azure portal.
 
 1. In the upper left corner of the Azure portal, click **Create a resource**.
 
@@ -236,9 +241,9 @@
 
 1. On the **Edit template** blade, click **Load file**.
 
-1. In the **Choose File to Upload** dialog box, navigate to the **F:\\Labfiles\\Mod03\\Starter\\** folder, select the **dsc-extension-template.json** file, and click **Open**. This will load the following content into the template editor pane:
+1. In the **Choose File to Upload** dialog box, navigate to the **\\allfiles\\AZ-301T04\\Module_02\\LabFiles\\Starter\\** folder, select the **dsc-extension-template.json** file, and click **Open**. This will load the following content into the template editor pane:
 
-    ```
+    ```json
     {
         "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
         "contentVersion": "1.0.0.0",
@@ -309,41 +314,9 @@
 
 1. In the hub menu in the Azure portal, click **Resource groups**.
 
-1. On the **Resource groups** blade, click the resource group into which you deployed the virtual machine.
-
-1. On the resource group blade, click the entry representing the **Network Security Group** resource.
-
-1. On the network security group blade, click **Inbound security rules**. 
-
-1. In the **Inbound security rules** pane, click the **Add** button at the top of the blade.
-
-1. In the **Add inbound security rule** pane, perform the following tasks:
-
-    - In the **Source** list, leave the value set to **Any**.
-
-    - In the **Source port ranges** field, leave the value set to **\***.
-
-    - In the **Destination** list, leave the value set to **Any**.
-
-    - In the **Destination port ranges** field, enter the value **80**.
-
-    - In the **Protocol** section, select the **TCP** option.
-
-    - In the **Action** section, leave the value set to **Allow**.
-
-    - In the **Priority** field, enter the value **1100**.
-
-    - In the **Name** field, enter the value **AllowHTTPInBound**.
-
-    - In the **Description** field, enter the value **Allow HTTP Inbound**.
-
-    - Click the **OK** button.
-
-1. In the hub menu in the Azure portal, click **Resource groups**.
-
 1. On the **Resource groups** blade, click the entry representing the resource group into which you deployed the virtual machine.
 
-1. On the resource group blade, click the entry representing the virtual machine you deployed.
+1. On the resource group blade, click the entry representing the **Virtual Machine** you deployed.
 
 1. On the **Virtual machine** blade, locate the **Public IP address** entry, and identify its value.
 
@@ -362,7 +335,7 @@
 
 1. On the Taskbar, click the **File Explorer** icon.
 
-1. In the **File Explorer** window that appears, navigate to the **F:\\Labfiles\\Mod03\\Starter** folder.
+1. In the **File Explorer** window that appears, navigate to the **\\allfiles\\AZ-301T04\\Module_02\\LabFiles\\Starter\\** folder.
 
 1. Right-click the **vmss-template.json** file and select the **Open with Code** option to start the **Visual Studio Code** application.
 
@@ -389,7 +362,7 @@
 
 1. On the **Edit template** blade, click **Load file**.
 
-1. In the **Open** file dialog that appears, navigate to the **F:\\Labfiles\\Mod03\\Starter** folder.
+1. In the **Open** file dialog that appears, navigate to the **\\allfiles\\AZ-301T04\\Module_02\\LabFiles\\Starter\\*** folder.
 
 1. Select the **vmss-template.json** file.
 
@@ -451,7 +424,7 @@
 
 1. If this is your first time opening the **Cloud Shell** using your subscription, you will see a wizard to configure **Cloud Shell** for first-time usage. When prompted, in the **Welcome to Azure Cloud Shell** pane, click **Bash (Linux)**.
 
-    > **Note**: If you do not see the configuration options for **Cloud Shell**, this is most likely because you are using an existing subscription with this course's labs. If so, proceed directly to the next task. 
+    > **Note**: If you do not see the configuration options for **Cloud Shell**, this is most likely because you are using an existing subscription with this course's labs. If so, proceed directly to the next task.
 
 1. In the **You have no storage mounted** pane, click **Show advanced settings**, perform the following tasks:
 
@@ -459,9 +432,9 @@
 
     - In the **Cloud Shell region** drop-down list, select the Azure region matching or near the location where you intend to deploy resources in this exercise.
 
-    - In the **Resource group** section, ensure that the **Create new** option is selected and then, in the text box, type **AADesignLab0303-RG**.
+    - In the **Resource group** section, ensure that the **Use existing** option is selected and then select **AADesignLab0301-RG**.
 
-    - In the **Storage account** section, ensure that the **Create new** option is selected and then, in the text box below, type a unique name consisting of a combination of between 3 and 24 characters and digits. 
+    - In the **Storage account** section, ensure that the **Create new** option is selected and then, in the text box below, type a unique name consisting of a combination of between 3 and 24 characters and digits.
 
     - In the **File share** section, ensure that the **Create new** option is selected and then, in the text box below, type **cloudshell**.
 
@@ -474,25 +447,25 @@
 
 1. At the **Cloud Shell** command prompt at the bottom of the portal, type in the following command and press **Enter** to create a local directory to install the Azure Building Blocks npm package:
 
-    ```
+    ```sh
     mkdir ~/.npm-global
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to update the npm configuration to include the new local directory:
 
-    ```
+    ```sh
     npm config set prefix '~/.npm-global'
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to open the ~./bashrc configuration file for editing:
 
-    ```
+    ```sh
     vi ~/.bashrc
     ```
 
 1. At the **Cloud Shell** command prompt, in the vi editor interface, scroll down to the bottom of the file (or type **G**), scroll to the right to the right-most character on the last line (or type **$**), type **a** to enter the **INSERT** mode, press **Enter** to start a new line, and then type the following to add the newly created directory to the system path:
 
-    ```
+    ```sh
     export PATH="$HOME/.npm-global/bin:$PATH"
     ```
 
@@ -500,17 +473,17 @@
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to install the Azure Building Blocks npm package:
 
-    ```
+    ```sh
     npm install -g @mspnp/azure-building-blocks
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to exit the shell:
 
-    ```
+    ```sh
     exit
     ```
 
-1. In the **Cloud Shell timed out** pane, click **Reconnect**. 
+1. In the **Cloud Shell timed out** pane, click **Reconnect**.
 
     > **Note**: You need to restart Cloud Shell for the installation of the Buliding Blocks npm package to take effect.
 
@@ -525,49 +498,54 @@
 
 1.  At the **Cloud Shell** command prompt, type in the following command and press **Enter** to view the content of the Azure Building Block parameter file you will use for this deployment:
 
-    ```
+    ```sh
     cat ./reference-architectures/virtual-machines/single-vm/parameters/windows/single-vm.json
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create a variable which value designates the name of your Azure subscription:
 
-    ```
-    SUBSCRIPTION_ID=$(az account list --query "[0].id" | tr -d '"')
+    ```sh
+    SUBSCRIPTION_ID=$(az account list --query "[0].id" --output tsv | tr -d '"')
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create a variable which value designates the name of the resource group you created earlier in this exercise:
 
-    ```
+    ```sh
     RESOURCE_GROUP='AADesignLab0303-RG'
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create a variable which value designates the Azure region you will use for the deployment:
 
-    ```
+    ```sh
     LOCATION=$(az group list --query "[?name == 'AADesignLab0301-RG'].location" --output tsv)
     ```
 
+1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create a resource group that you will use for the deployment:
+
+    ```sh
+    az group create --name $RESOURCE_GROUP --location $LOCATION
+    ```
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to replace the placeholder for the **adminUsername** parameter with the value **Student** in the Building Blocks parameter file:
 
-    ```
+    ```sh
     sed -i.bak1 's/"adminUsername": ""/"adminUsername": "Student"/' ./reference-architectures/virtual-machines/single-vm/parameters/windows/single-vm.json
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to replace the placeholder for the **adminPassword** parameter with the value **Pa55w.rd1234** in the Building Blocks parameter file:
 
-    ```
+    ```sh
     sed -i.bak2 's/"adminPassword": ""/"adminPassword": "Pa55w.rd1234"/' ./reference-architectures/virtual-machines/single-vm/parameters/windows/single-vm.json
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to verify that the parameter values were successfully changed in the Building Blocks parameter file:
 
-    ```
+    ```sh
     cat ./reference-architectures/virtual-machines/single-vm/parameters/windows/single-vm.json
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to deploy a Windows Server 2016 Azure VM by using the Azure Building Blocks:
 
-    ```
+    ```sh
     azbb -g $RESOURCE_GROUP -s $SUBSCRIPTION_ID -l $LOCATION -p ./reference-architectures/virtual-machines/single-vm/parameters/windows/single-vm.json --deploy
     ```
 
@@ -595,13 +573,13 @@
 
 1.  At the **Cloud Shell** command prompt, type in the following command and press **Enter** to view the content of the Azure Building Block parameter file you will use for this deployment:
 
-    ```
+    ```sh
     cat ./reference-architectures/virtual-machines/single-vm/parameters/linux/single-vm.json
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to generate the SSH key pair that you will use to authenticate when accessing the Linux VM:
 
-    ```
+    ```sh
     ssh-keygen -t rsa -b 2048
     ```
 
@@ -611,13 +589,13 @@
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create a variable which value designates the public key of the newly generated key pair:
 
-    ```
+    ```sh
     PUBLIC_KEY=$(cat ~/.ssh/id_rsa.pub)
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create a variable which value designates the public key of the newly generated key pair and which takes into account any special character the public key might include:
 
-    ```
+    ```sh
     PUBLIC_KEY_REGEX="$(echo $PUBLIC_KEY | sed -e 's/\\/\\\\/g; s/\//\\\//g; s/&/\\\&/g')"
     ```
 
@@ -625,49 +603,49 @@
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create a variable which value designates the name of your Azure subscription:
 
-    ```
-    SUBSCRIPTION_ID=$(az account list --query "[0].id" | tr -d '"')
+    ```sh
+    SUBSCRIPTION_ID=$(az account list --query "[0].id" --output tsv | tr -d '"')
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create a variable which value designates the name of the resource group you will use for the deployment:
 
-    ```
+    ```sh
     RESOURCE_GROUP='AADesignLab0304-RG'
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create a variable which value designates the Azure region you will use for the deployment:
 
-    ```
+    ```sh
     LOCATION=$(az group list --query "[?name == 'AADesignLab0301-RG'].location" --output tsv)
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to replace the placeholder for the **adminUsername** parameter with the value **Student** in the Building Blocks parameter file:
 
-    ```
+    ```sh
     sed -i.bak1 's/"adminUsername": ""/"adminUsername": "Student"/' ./reference-architectures/virtual-machines/single-vm/parameters/linux/single-vm.json
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to replace the placeholder for the **sshPublicKey** parameter with the value of the **$PUBLIC_KEY_REGEX** variable in the Building Blocks parameter file:
 
-    ```
+    ```sh
     sed -i.bak2 's/"sshPublicKey": ""/"sshPublicKey": "'"$PUBLIC_KEY_REGEX"'"/' ./reference-architectures/virtual-machines/single-vm/parameters/linux/single-vm.json
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to verify that the parameter values were successfully changed in the Building Blocks parameter file:
 
-    ```
+    ```sh
     cat ./reference-architectures/virtual-machines/single-vm/parameters/linux/single-vm.json
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create a new resource group:
 
-    ```
+    ```sh
     az group create --name $RESOURCE_GROUP --location $LOCATION
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to deploy a Linux Azure VM by using the Azure Building Blocks:
 
-    ```
+    ```sh
     azbb -g $RESOURCE_GROUP -s $SUBSCRIPTION_ID -l $LOCATION -p ./reference-architectures/virtual-machines/single-vm/parameters/linux/single-vm.json --deploy
     ```
 
@@ -703,7 +681,7 @@
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to list all resource groups you created in this lab:
 
-    ```
+    ```sh
     az group list --query "[?starts_with(name,'AADesignLab03')]".name --output tsv
     ```
 
@@ -713,7 +691,7 @@
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to delete the resource groups you created in this lab
 
-    ```
+    ```sh
     az group list --query "[?starts_with(name,'AADesignLab03')]".name --output tsv | xargs -L1 bash -c 'az group delete --name $0 --no-wait --yes'
     ```
 

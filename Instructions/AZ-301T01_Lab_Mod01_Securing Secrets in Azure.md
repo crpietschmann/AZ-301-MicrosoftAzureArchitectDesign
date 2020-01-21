@@ -1,4 +1,4 @@
-# Managing Security and Identity for Azure Solutions 
+# Managing Security and Identity for Azure Solutions
 
 # Lab Answer Key: Securing Secrets in Azure
 
@@ -48,15 +48,15 @@
 
 1. On the **Create key vault** blade, perform the following tasks:
 
-    - In the **Name** text box, type a globally unique value.
-
     - Leave the **Subscription** drop-down list entry set to its default value.
 
-    - In the **Resource group** section, ensure that the **Create new** option is selected and then, in the text box, type **AADesignLab0901-RG**.
+    - In the **Resource group** section, select the **Create new** option and then, in the text box, type **AADesignLab0901-RG**.
 
-    - In the **Location** drop-down list, select the Azure region to which you intend to deploy resources in this lab.
+    - In the **Key vault name** text box, type a globally unique value.
 
-    - Click **Pricing tier**, on the **Pricing tier** blade, click **A1 Standard**, and then click **Select**.
+    - In the **Region** drop-down list, select the Azure region to which you intend to deploy resources in this lab.
+
+    - Click **Pricing tier**, on the **Pricing tier** blade, click **Standard**, and then click **Select**.
 
     - Leave all remaining settings with their default values.
 
@@ -96,7 +96,7 @@
 
 1. If this is your first time opening the **Cloud Shell** using your subscription, you will see a wizard to configure **Cloud Shell** for first-time usage. When prompted, in the **Welcome to Azure Cloud Shell** pane, click **Bash (Linux)**.
 
-    > **Note**: If you do not see the configuration options for **Cloud Shell**, this is most likely because you are using an existing subscription with this course's labs. If so, proceed directly to the next task. 
+    > **Note**: If you do not see the configuration options for **Cloud Shell**, this is most likely because you are using an existing subscription with this course's labs. If so, proceed directly to the next task.
 
 1. In the **You have no storage mounted** pane, click **Show advanced settings**, perform the following tasks:
 
@@ -106,7 +106,7 @@
 
     - In the **Resource group** section, select the **Use existing** option and then, in the drop-down list, select **AADesignLab0901-RG**.
 
-    - In the **Storage account** section, ensure that the **Create new** option is selected and then, in the text box below, type a unique name consisting of a combination of between 3 and 24 characters and digits. 
+    - In the **Storage account** section, ensure that the **Create new** option is selected and then, in the text box below, type a unique name consisting of a combination of between 3 and 24 characters and digits.
 
     - In the **File share** section, ensure that the **Create new** option is selected and then, in the text box below, type **cloudshell**.
 
@@ -118,37 +118,37 @@
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create a variable which value designates the name of the resource group that contains the Azure key vault you deployed earlier in this exercise:
 
-    ```
+    ```sh
     RESOURCE_GROUP='AADesignLab0901-RG'
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to retrieve the name of the Azure key vault you created earlier in this exercise:
 
-    ```
+    ```sh
     KEY_VAULT_NAME=$(az keyvault list --resource-group $RESOURCE_GROUP --query "[0].name" --output tsv)
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command, and press **Enter** to list secrets in the key vault:
 
-    ```
-    az keyvault secret list --vault-name $KEY_VAULT_NAME
+    ```sh
+    az keyvault secret list --vault-name $KEY_VAULT_NAME --output json
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to display the value of the **thirdPartyKey** secret:
 
-    ```
+    ```sh
     az keyvault secret show --vault-name $KEY_VAULT_NAME --name thirdPartyKey --query value --output tsv
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to add a new secret to your key vault:
 
-    ```
+    ```sh
     az keyvault secret set --vault-name $KEY_VAULT_NAME --name firstPartyKey --value 56f8a55119845511c81de488
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to list secrets in the key vault:
 
-    ```
+    ```sh
     az keyvault secret list --vault-name $KEY_VAULT_NAME --query "[*].{Id:id,Created:attributes.created}" --out table
     ```
 
@@ -168,9 +168,9 @@
 
 1. On the **Edit template** blade, click **Load file**.
 
-1. In the **Choose File to Upload** dialog box, navigate to the **F:\\Labfiles\\Mod09\\Starter\\** folder, select the **secret-template.json** file, and click **Open**. This will load the following content into the template editor pane:
+1. In the **Choose File to Upload** dialog box, navigate to the **\\allfiles\\AZ-301T01\\Module_01\\LabFiles\\Starter\\** folder, select the **secret-template.json** file, and click **Open**. This will load the following content into the template editor pane:
 
-    ```
+    ```json
     {
         "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
         "contentVersion": "1.0.0.0",
@@ -224,9 +224,9 @@
 
 1. On the **Edit template** blade, click **Load file**.
 
-1. In the **Choose File to Upload** dialog box, navigate to the **F:\\Labfiles\\Mod09\\Starter\\** folder, select the **storage-template.json** file, and click **Open**. This will load the following content into the template editor pane:
+1. In the **Choose File to Upload** dialog box, navigate to the **\\allfiles\\AZ-301T01\\Module_01\\LabFiles\\Starter\\** folder, select the **storage-template.json** file, and click **Open**. This will load the following content into the template editor pane:
 
-    ```
+    ```json
     {
         "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
         "contentVersion": "1.0.0.0",
@@ -249,7 +249,7 @@
                 "sku": {
                     "name": "Standard_LRS"
                 },
-                "properties": {                
+                "properties": {
                 }
             },
             {
@@ -309,7 +309,7 @@
 
 ## Exercise 2: Deploy Azure VM using Key Vault secret
 
-#### Task 1: Retrive the value of the key vault Resource Id parameter
+#### Task 1: Retrieve the value of the key vault Resource Id parameter
 
 1. At the top of the portal, click the **Cloud Shell** icon to open a new Clould Shell instance.
 
@@ -321,35 +321,35 @@
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to retrieve the resource id of the Azure key vault you created earlier in this exercise:
 
-    ```
+    ```sh
     KEY_VAULT_ID=$(az keyvault list --resource-group $RESOURCE_GROUP --query "[0].id" --output tsv)
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to create a variable which value designates the name of the Azure key vault resource id and which takes into account any special character the resource id might include:
 
-    ```
+    ```sh
     KEY_VAULT_ID_REGEX="$(echo $KEY_VAULT_ID | sed -e 's/\\/\\\\/g; s/\//\\\//g; s/&/\\\&/g')"
     ```
 
 #### Task 2: Prepare the Azure Resource Manager deployment template and parameters files
 
-1. In the **Cloud Shell** pane, click the **Upload/Download files** icon and, in the drop-down menu, click **Upload**. 
+1. In the **Cloud Shell** pane, click the **Upload/Download files** icon and, in the drop-down menu, click **Upload**.
 
-1. In the **Open** dialog box, navigate to the **F:\\Labfiles\\Mod09\\Starter\\** folder, select the **vm-template.json** file, and click **Open**. 
+1. In the **Open** dialog box, navigate to the **\\allfiles\\AZ-301T01\\Module_01\\LabFiles\\Starter\\** folder, select the **vm-template.json** file, and click **Open**.
 
-1. In the **Cloud Shell** pane, click the **Upload/Download files** icon and, in the drop-down menu, click **Upload**. 
+1. In the **Cloud Shell** pane, click the **Upload/Download files** icon and, in the drop-down menu, click **Upload**.
 
-1. In the **Open** dialog box, navigate to the **F:\\Labfiles\\Mod09\\Starter\\** folder, select the **vm-template.parameters.json** file, and click **Open**. 
+1. In the **Open** dialog box, navigate to the **\\allfiles\\AZ-301T01\\Module_01\\LabFiles\\Starter\\** folder, select the **vm-template.parameters.json** file, and click **Open**.
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to replace the placeholder for the **$KEY_VAULT_ID** parameter in the **vm-template.parameters.json** parameters file with the value of the **$KEY_VAULT_ID** variable:
 
-    ```
+    ```sh
     sed -i.bak1 's/"$KEY_VAULT_ID"/"'"$KEY_VAULT_ID_REGEX"'"/' ~/vm-template.parameters.json
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to verify that the placeholder was successfully replaced in the parameters file:
 
-    ```
+    ```sh
     cat ~/vm-template.parameters.json
     ```
 
@@ -363,17 +363,15 @@
 
 1. On the key vault blade, click **Access policies**.
 
-1. On the **Access policies** blade, click the **Click to show advanced access policies** link.
-
-1. Select the **Enable access to Azure Resource Manager for template deployment** checkbox.
+1. On the **Access policies** blade, under the **Enable access to:** area, select the **Azure Resource Manager for template deployment** checkbox.
 
 1. Click the **Save** button at the top of the pane.
 
-#### Task 4: Deploy a Linux VM with the password paramter set by using a key vault secret.
+#### Task 4: Deploy a Linux VM with the password parameter set by using a key vault secret.
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to deploy the Azure Resource Manager template with the specified parameters file:
 
-    ```
+    ```sh
     az group deployment create --resource-group $RESOURCE_GROUP --template-file ~/vm-template.json --parameters @~/vm-template.parameters.json
     ```
 
@@ -389,25 +387,25 @@
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to retrieve the name of the Azure key vault containing the secret that stores the value of the password of the local Administrator account:
 
-    ```
+    ```sh
     KEY_VAULT_NAME=$(az keyvault list --resource-group $RESOURCE_GROUP --query "[0].name" --output tsv)
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to retrieve the value of the secret:
 
-    ```
+    ```sh
     az keyvault secret show --vault-name $KEY_VAULT_NAME --name vmPassword --query value --output tsv
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to retrieve the public IP address of the Azure VM you deployed in the previous task:
 
-    ```
+    ```sh
     PUBLIC_IP=$(az network public-ip list --resource-group $RESOURCE_GROUP --query "[0].ipAddress" --output tsv)
     ```
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to connect to the Azure VM via SSH:
 
-    ```
+    ```sh
     ssh Student@$PUBLIC_IP
     ```
 
@@ -439,7 +437,7 @@
 
 1. At the **Cloud Shell** command prompt, type in the following command and press **Enter** to delete the resource groups you created in this lab
 
-    ```
+    ```sh
     az group list --query "[?starts_with(name,'AADesignLab09')]".name --output tsv | xargs -L1 bash -c 'az group delete --name $0 --no-wait --yes'
     ```
 
